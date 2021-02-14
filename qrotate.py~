@@ -1,0 +1,23 @@
+import numpy as np
+
+class Quart(object):
+    def __init__():
+        pass
+
+    def fast_normalise(q):
+        """
+        https://github.com/KieranWynn/pyquaternion/blob/99025c17bab1c55265d61add13375433b35251af/pyquaternion/quaternion.py#L513
+        Normalise the object to a unit quaternion using a fast approximation method if appropriate.
+        Object is guaranteed to be a quaternion of approximately unit length
+        after calling this operation UNLESS the object is equivalent to Quaternion(0)
+        """
+        
+        mag_squared = np.dot(q, q)
+        if (mag_squared == 0):
+            return
+        if (abs(1.0 - mag_squared) < 2.107342e-08):
+            mag =  ((1.0 + mag_squared) / 2.0) # More efficient. Pade approximation valid if error is small
+        else:
+            mag =  np.sqrt(mag_squared) # Error is too big, take the performance hit to calculate the square root properly
+
+        return q / mag
